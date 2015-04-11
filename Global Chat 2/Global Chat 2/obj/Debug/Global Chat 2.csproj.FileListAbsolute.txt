@@ -1,0 +1,21 @@
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe.config
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.csprojResolveAssemblyReference.cache
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.pdb
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.exe
+c:\users\dane\documents\visual studio 2013\Projects\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.pdb
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe.config
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.exe
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.pdb
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.pdb
+C:\Users\Dane\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.csprojResolveAssemblyReference.cache
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe.config
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.exe
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.pdb
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.pdb
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\obj\Debug\Global Chat 2.csprojResolveAssemblyReference.cache
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.xml
