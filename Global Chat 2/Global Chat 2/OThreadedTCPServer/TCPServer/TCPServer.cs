@@ -136,7 +136,7 @@ namespace Global_Chat_2
             {
               
 
-                    DispatchClientEvent(cl, why);
+                DispatchClientEvent(cl, why);
                 if (cl.Connected)
                 {
                    

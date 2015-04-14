@@ -102,6 +102,9 @@ namespace Global_Chat_2
                             Console.WriteLine("exit - Terminates the application.");
                             Console.WriteLine("changeauthkey - changes the authkey for the server.");
                             Console.WriteLine("changeport - changes the port of the server.");
+                            Console.WriteLine("list - Lists connections");
+                            Console.WriteLine("help - shows this list");
+                            Console.WriteLine("msg <message> - broadcasts a message signed global chat to all servers (encoded in json) ");
                             break;
 
                         case "list":
