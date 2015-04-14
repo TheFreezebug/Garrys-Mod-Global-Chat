@@ -121,12 +121,25 @@ namespace Global_Chat_2
 
             try
             {
+                if (cl.Connected)
+                {
+                    WriteClientBuffer(cl, BitConverter.GetBytes(why));
+                }
+            }
+            catch
+            {
+                // I don't have to do anything
+            }
+
+
+            try
+            {
               
 
                     DispatchClientEvent(cl, why);
                 if (cl.Connected)
                 {
-                    WriteClientBuffer(cl, BitConverter.GetBytes(why));
+                   
                     cl.Client.Disconnect(true); // rip in kil.
                     cl.Close();
 
@@ -139,6 +152,35 @@ namespace Global_Chat_2
                 donut.outlc("Removeclient failed! ", ConsoleColor.DarkYellow);
                 donut.outlc(EXC.ToString(), ConsoleColor.DarkYellow);
                 donut.outlc("!!!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
+
+            }
+
+            try
+            {
+                for (int I=0;I < ConnectedClients.Count;I++) {
+                    var DCLI2 = ConnectedClients[I];
+                    if (DCLI2.Connected == false)
+                    {
+
+
+                        for (int D = 0; D < ConnectedClients.Count; D++)
+                        {
+                            var cli2 = ConnectedClients[D];
+                            if (cl == DCLI2)
+                            {
+                                ConnectedClients.RemoveAt(D);
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception EXC)
+            {
+                donut.outlc("Failed to prune clients", ConsoleColor.DarkYellow);
+                donut.outlc(EXC.ToString(), ConsoleColor.DarkYellow);
+                donut.outlc("!!!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
+
 
             }
         }

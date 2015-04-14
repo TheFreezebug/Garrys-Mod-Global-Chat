@@ -1,4 +1,5 @@
-﻿/*
+﻿/*  D.-O.n.U.T Utility library. 
+ *  Direct-Output Notationed UTility 
  *  (C) Dane Bush
  *  9/11/2014 8:45 AM
  */
@@ -6,9 +7,7 @@ using System;
 using System.Text;
 namespace Global_Chat_2
 {
-	/// <summary>
-	/// aw yis.
-	/// </summary>
+	
 	public abstract class donut
 	{
         private static readonly bool sprinkles = true;

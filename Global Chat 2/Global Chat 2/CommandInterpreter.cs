@@ -48,6 +48,8 @@ namespace Global_Chat_2
                
 
                 Console.Write("> ");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
                 string adx = Console.ReadLine();
                 Console.WriteLine();
                 string[] tB ;
@@ -68,6 +70,29 @@ namespace Global_Chat_2
                             Init.Config.PromptForPort();
                             Console.WriteLine("Please restart the server.");
                             break;
+                        case "msg":
+                            if (CBreak.Count < 2 ){
+                                Console.WriteLine("Not enough arguments.");
+                                break;
+                            }      
+
+                            var svmsg = "{\"Type\":\"CServMessage\",\"IDN\":218,\"BufferData\":{\"message\":\"@SYSMSG@\"}}";
+                            var msgstr = "";
+                            for (int I=0;I < (CBreak.Count - 1); I++) {
+                                msgstr+= CBreak[ 1 + I ].ToString() + " ";
+                            }
+                            var clstr = svmsg.Replace("@SYSMSG@",msgstr);
+                            var cls = Init.Server.GetClients();
+                            var jsonbuff = donut.DoAsciiEncode(clstr);
+                            Console.WriteLine();
+                            for (int I = 0; I < cls.Count; I++)
+                            {
+                                var mcli = cls[I];
+                                Init.Server.WriteClientBuffer(mcli, jsonbuff);
+                                
+                            }
+                            Console.WriteLine("Message sent.");
+                            break;
 
                         case "changeauthkey":
                             Init.Config.PromptForAuthkey();
@@ -80,17 +105,18 @@ namespace Global_Chat_2
                             break;
 
                         case "list":
-                            var cls = Init.Server.GetClients();
+                            var cls3 = Init.Server.GetClients();
                             Console.WriteLine();
-                            for (int I = 0; I < cls.Count; I++)
+                            for (int I = 0; I < cls3.Count; I++)
                             {
-                                var mcli = cls[I];
+                                var mcli = cls3[I];
                                 Console.WriteLine(mcli.Client.RemoteEndPoint);
                             }
                             Console.WriteLine();
                             break;
                         default:
                             Console.WriteLine("Unknown command \"" + CBreak[0] + "\"");
+
                             break;
 
 
@@ -101,8 +127,9 @@ namespace Global_Chat_2
                     }
 
                 }
-                catch
+                catch(Exception EXC)
                 {
+                    donut.outlc(EXC.ToString(),ConsoleColor.Red);
                     donut.outlc("Command error.", ConsoleColor.DarkRed);
                 }
 

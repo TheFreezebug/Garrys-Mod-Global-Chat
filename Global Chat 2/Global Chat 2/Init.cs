@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 using System.Drawing;
 using ColorConsole;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Bson;
+using Newtonsoft.Json.Utilities;
+using Newtonsoft.Json.Schema;
+
+
+
 namespace Global_Chat_2
 {
     class Init
@@ -84,14 +93,20 @@ namespace Global_Chat_2
             var cli = ga.Client;
             if (evt==(int)TCPServerClientEventArgs.Actions.CONNECT) {
                 donut.outlc(cli.Client.RemoteEndPoint + " has connected. ", ConsoleColor.DarkGreen);
+
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
             else if (evt == (int)TCPServerClientEventArgs.Actions.AUTHENTICATED)
             {
                 donut.outlc(cli.Client.RemoteEndPoint + " auth success. ", ConsoleColor.DarkGreen);
+
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
             else if (evt == (int)TCPServerClientEventArgs.Actions.FAILAUTH)
             {
                 donut.outlc(cli.Client.RemoteEndPoint + " auth fail. ", ConsoleColor.DarkGreen);
+
+                Console.ForegroundColor = ConsoleColor.Gray;
             } 
 
         }
@@ -102,19 +117,62 @@ namespace Global_Chat_2
             var buff = donut.PokeNulls(be.Buffer);
             var cli = be.Client;
             var SClients = OServer.GetClients();
-
-            donut.outlc(cli.Client.RemoteEndPoint + " | " + donut.DoStringEncode(buff, buff.Length), ConsoleColor.DarkYellow);
-
-            for (int I = 0; I < SClients.Count; I++)
+            try
             {
-                var MyCli = SClients[I];
-                if ( !(MyCli == cli))
+                var jas = donut.DoStringEncode(buff, buff.Length);
+                var JDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(jas);
+                object MsgType;
+                object BUFFERDATA;
+                string bufferjas;
+
+                JDict.TryGetValue("Type", out MsgType);
+                JDict.TryGetValue("BufferData", out BUFFERDATA);
+                bufferjas = BUFFERDATA.ToString();
+                
+                if ((string)MsgType == "GlobalChat")
                 {
-                    OServer.WriteClientBuffer(MyCli, buff);
+                    var BufferDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(bufferjas);
+
+                    object name;
+                    object message;
+
+                    BufferDict.TryGetValue("name", out name);
+                    BufferDict.TryGetValue("message", out message);
+
+                    donut.outlc((string)name + " : " + (string)message, ConsoleColor.DarkYellow) ;
                 }
+                 
+
+               
+               
+
+                
+
+
+
+
 
             }
+            catch (Exception EXC)
+            {
             
+            }
+            try
+            {
+                for (int I = 0; I < SClients.Count; I++)
+                {
+                    var MyCli = SClients[I];
+                    if (!(MyCli == cli))
+                    {
+                        OServer.WriteClientBuffer(MyCli, buff);
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
         }
 
     }
