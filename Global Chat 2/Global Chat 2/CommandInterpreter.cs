@@ -113,7 +113,10 @@ namespace Global_Chat_2
                             for (int I = 0; I < cls3.Count; I++)
                             {
                                 var mcli = cls3[I];
-                                Console.WriteLine(mcli.Client.RemoteEndPoint);
+                                if (mcli.Client != null)
+                                {
+                                    Console.WriteLine(mcli.Client.RemoteEndPoint);
+                                }
                             }
                             Console.WriteLine();
                             break;

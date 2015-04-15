@@ -135,7 +135,7 @@ namespace Global_Chat_2
             try
             {
                 DispatchClientEvent(cl, why);
-                if (cl.Connected)
+                if (cl.Connected) // Liar, fucking liar.
                 {
 
                     cl.Client.Disconnect(true); // work
@@ -169,10 +169,19 @@ namespace Global_Chat_2
                 }
                  */
                 for (int I = 0; I < ConnectedClients.Count; I++)
-                {   var DCLI2 = ConnectedClients[I];
-                    if (DCLI2.Connected == false)
+                {  
+                    var DCLI2 = ConnectedClients[I];
+                    if (DCLI2.Client == null) // TCPClient.Dicks.Eat(Dicks.All);
                     {
                         ConnectedClients.RemoveAt(I);
+                    } 
+                    else if (DCLI2.Client.Poll(0, SelectMode.SelectRead))
+                    {
+                        byte[] buff1 = new byte[1];
+                        if (DCLI2.Client.Receive(buff1, SocketFlags.Peek) == 0) // https://social.msdn.microsoft.com/Forums/en-US/c857cad5-2eb6-4b6c-b0b5-7f4ce320c5cd/c-how-to-determine-if-a-tcpclient-has-been-disconnected?forum=netfxnetcom
+                        {
+                            ConnectedClients.RemoveAt(I);
+                        }
                     }
                    
                 }
