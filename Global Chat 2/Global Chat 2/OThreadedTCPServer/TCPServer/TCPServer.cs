@@ -128,51 +128,53 @@ namespace Global_Chat_2
             }
             catch
             {
-                // I don't have to do anything
+                // Syntax please stop
             }
 
 
             try
             {
-              
-
                 DispatchClientEvent(cl, why);
                 if (cl.Connected)
                 {
-                   
-                    cl.Client.Disconnect(true); // rip in kil.
-                    cl.Close();
 
-
+                    cl.Client.Disconnect(true); // work
                 }
-
+                cl.Close(); // fucking work oh my god stop throwing exceptions
             }
             catch (Exception EXC)
             {
                 donut.outlc("Removeclient failed! ", ConsoleColor.DarkYellow);
                 donut.outlc(EXC.ToString(), ConsoleColor.DarkYellow);
                 donut.outlc("!!!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
-
             }
-
             try
             {
+              /*   WOW I WAS TIRED WHEN I MADE THIS
+             // prune clients (because net sockets are bad at checking if connected :v)
                 for (int I=0;I < ConnectedClients.Count;I++) {
-                    var DCLI2 = ConnectedClients[I];
+                    var DCLI2 = ConnectedClients[I]; // wtf was I even
                     if (DCLI2.Connected == false)
                     {
-
-
-                        for (int D = 0; D < ConnectedClients.Count; D++)
+                        for (int D = 0; D < ConnectedClients.Count; D++) // cartexplode
                         {
                             var cli2 = ConnectedClients[D];
-                            if (cl == DCLI2)
+                            if (cli2 == DCLI2)
                             {
-                                ConnectedClients.RemoveAt(D);
+                                ConnectedClients.RemoveAt(D); 
                             }
                         }
 
                     }
+                }
+                 */
+                for (int I = 0; I < ConnectedClients.Count; I++)
+                {   var DCLI2 = ConnectedClients[I];
+                    if (DCLI2.Connected == false)
+                    {
+                        ConnectedClients.RemoveAt(I);
+                    }
+                   
                 }
             }
             catch (Exception EXC)
