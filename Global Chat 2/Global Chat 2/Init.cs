@@ -123,10 +123,12 @@ namespace Global_Chat_2
                 var JDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(jas);
                 object MsgType;
                 object BUFFERDATA;
+                //object ServerID;
                 string bufferjas;
 
                 JDict.TryGetValue("Type", out MsgType);
                 JDict.TryGetValue("BufferData", out BUFFERDATA);
+               
                 bufferjas = BUFFERDATA.ToString();
                 
                 if ((string)MsgType == "GlobalChat")
@@ -141,17 +143,6 @@ namespace Global_Chat_2
 
                     donut.outlc((string)name + " : " + (string)message, ConsoleColor.DarkYellow) ;
                 }
-                 
-
-               
-               
-
-                
-
-
-
-
-
             }
             catch (Exception EXC)
             {
