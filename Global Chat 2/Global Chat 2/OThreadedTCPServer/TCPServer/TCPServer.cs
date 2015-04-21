@@ -97,6 +97,33 @@ namespace Global_Chat_2
             #endregion
 
 
+        private void PruneClients()
+        {
+
+            for (int I = 0; I < ConnectedClients.Count; I++)
+            {
+                     TcpClient cli2 = ConnectedClients[I];
+                    try {
+                     if (cli2.Client == null)
+                     {
+                         ConnectedClients.RemoveAt(I);
+                         donut.outlc("Killed bad client!", ConsoleColor.Red);
+                     }
+                      else if ((cli2.Client.Poll(1,SelectMode.SelectRead)  && cli2.Client.Available == 0)) {
+                          donut.outlc("Killed bad client! 2 ", ConsoleColor.Red);
+                         ConnectedClients.RemoveAt(I);
+                     } 
+                    } catch {
+                        donut.outlc("Killed bad client! 3 ", ConsoleColor.Red);
+                        ConnectedClients.RemoveAt(I);
+                    }
+               
+            }
+            
+        }
+
+
+
         #region Remove Client Function
         private void RemoveClient(TcpClient cl, int why) // waste of a method sorry.
         {
@@ -104,10 +131,12 @@ namespace Global_Chat_2
             {
                 for (int I = 0; I < ConnectedClients.Count; I++)
                 {
-                    var cli2 = ConnectedClients[I];
+                    TcpClient cli2 = ConnectedClients[I];
                     if (cl == cli2)
                     {
+                        donut.outlc("Removed client successfully.",ConsoleColor.Red);
                         ConnectedClients.RemoveAt(I);
+                        
                     }
                 }
             }
@@ -121,79 +150,16 @@ namespace Global_Chat_2
 
             try
             {
-                if (cl.Connected)
-                {
-                    WriteClientBuffer(cl, BitConverter.GetBytes(why));
-                }
+                cl.Close();
+                cl = null;
             }
             catch
             {
-                // Syntax please stop
-            }
-
-
-            try
-            {
-                DispatchClientEvent(cl, why);
-                if (cl.Connected) // Liar, fucking liar.
-                {
-
-                    cl.Client.Disconnect(true); // work
-                }
-                cl.Close(); // fucking work oh my god stop 
-            }
-            catch (Exception EXC)
-            {
-                donut.outlc("Removeclient failed! ", ConsoleColor.DarkYellow);
-                donut.outlc(EXC.ToString(), ConsoleColor.DarkYellow);
-                donut.outlc("!!!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
-            }
-            try
-            {
-              /*   WOW I WAS TIRED WHEN I MADE THIS
-             // prune clients (because net sockets are bad at checking if connected :v)
-                for (int I=0;I < ConnectedClients.Count;I++) {
-                    var DCLI2 = ConnectedClients[I]; // wtf was I even
-                    if (DCLI2.Connected == false)
-                    {
-                        for (int D = 0; D < ConnectedClients.Count; D++) // cartexplode
-                        {
-                            var cli2 = ConnectedClients[D];
-                            if (cli2 == DCLI2)
-                            {
-                                ConnectedClients.RemoveAt(D); 
-                            }
-                        }
-
-                    }
-                }
-                 */
-                for (int I = 0; I < ConnectedClients.Count; I++)
-                {  
-                    var DCLI2 = ConnectedClients[I];
-                    if (DCLI2.Client == null | DCLI2.Connected==false) // TCPClient.Dicks.Eat(Dicks.All);
-                    {
-                        ConnectedClients.RemoveAt(I);
-                    } 
-                    else if (DCLI2.Client.Poll(0, SelectMode.SelectRead))
-                    {   
-                        byte[] buff1 = new byte[1];
-                        if (DCLI2.Client.Receive(buff1, SocketFlags.Peek) == 0) // https://social.msdn.microsoft.com/Forums/en-US/c857cad5-2eb6-4b6c-b0b5-7f4ce320c5cd/c-how-to-determine-if-a-tcpclient-has-been-disconnected?forum=netfxnetcom
-                        {
-                            ConnectedClients.RemoveAt(I);
-                        }
-                    }
-                   
-                }
-            }
-            catch (Exception EXC)
-            {
-                donut.outlc("Failed to prune clients", ConsoleColor.DarkYellow);
-                donut.outlc(EXC.ToString(), ConsoleColor.DarkYellow);
-                donut.outlc("!!!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
-
 
             }
+
+            PruneClients();
+           
         }
 
 
@@ -283,11 +249,12 @@ namespace Global_Chat_2
                         blen = ClientStream.Read(netbuff,0,4096);
                         if (blen==0) {
                             RemoveClient(ThreadClient, (int)TCPServerClientEventArgs.Actions.DROPPED);
+                            return;
                         }
                        
                         var passwd = donut.DoStringEncode(netbuff,blen);
 
-                        donut.outlc(passwd + " | " + AuthCode,ConsoleColor.White);
+                       // donut.outlc(passwd + " | " + AuthCode,ConsoleColor.White);
                         if (passwd==AuthCode) {
                             WriteClientBuffer(ThreadClient, BitConverter.GetBytes((int)TCPServerClientEventArgs.Actions.AUTHENTICATED));
                             DispatchClientEvent(ThreadClient, (int)TCPServerClientEventArgs.Actions.AUTHENTICATED);
