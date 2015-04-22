@@ -188,19 +188,30 @@ namespace Global_Chat_2
        
             while (true)
             {
-                TcpClient T_Cli = R_TcpL.AcceptTcpClient(); 
-                if (ConnectedClients.Count == MaxConnections)
-                {                   
-                    T_Cli.Close();
+                try
+                {
+                    TcpClient T_Cli = R_TcpL.AcceptTcpClient();
+                    if (ConnectedClients.Count == MaxConnections)
+                    {
+                        T_Cli.Close();
+                    }
+                    ConnectedClients.Add(T_Cli); // Add client to connected list.
+                    // donut.outlc("Connected client! FUCK YEAH!", ConsoleColor.Red);
+                    // Client connected, create thread for client.
+                    Console.WriteLine("Connected client count is now " + ConnectedClients.Count);
+
+                    DispatchClientEvent(T_Cli, (int)TCPServerClientEventArgs.Actions.CONNECT);
+                    Thread CTHREAD = new Thread(new ParameterizedThreadStart(clientSpinThread)); // Create client thread
+                    CTHREAD.Start(T_Cli); // Start client thread passing client object.
                 }
-                ConnectedClients.Add(T_Cli); // Add client to connected list.
-               // donut.outlc("Connected client! FUCK YEAH!", ConsoleColor.Red);
-                // Client connected, create thread for client.
-                Console.WriteLine("Connected client count is now " + ConnectedClients.Count);
-                
-                DispatchClientEvent(T_Cli, (int)TCPServerClientEventArgs.Actions.CONNECT);
-                Thread CTHREAD = new Thread(new ParameterizedThreadStart(clientSpinThread)); // Create client thread
-                CTHREAD.Start(T_Cli); // Start client thread passing client object.
+                catch (Exception AN)
+                {
+
+                    donut.outlc(AN.ToString(), ConsoleColor.Red);
+                    donut.outlc("THREADSTART FAIL", ConsoleColor.Red);
+                    donut.outlc("!!!!!!!!!!!!!!!!!!", ConsoleColor.Red);
+                }
+
             }
         }
         #endregion 
