@@ -30,7 +30,7 @@ namespace Global_Chat_2
 
             private string AuthCode; // If so what is the password
 
-            private static List<TcpClient> ConnectedClients = new List<TcpClient>(); // The current connected clients.
+            private static TcpClient[] ConnectedClients; // The current connected clients.
 
             private Dictionary<string, string> Blacklist = new Dictionary<string, string>(); // Who is not allowed to connect.
 
@@ -89,6 +89,7 @@ namespace Global_Chat_2
                 donut.outlc(VIOL.ToString(), ConsoleColor.DarkYellow);
                 return (int)Codes.FAIL_START;
             }
+            ConnectedClients =  new TcpClient[maxclients];
             //donut.outlc("Successfully started TCP Server.", ConsoleColor.DarkYellow);
             ConnectorThread = new Thread(new ThreadStart(clientConnectSpin)); 
             ConnectorThread.Start();
@@ -96,32 +97,71 @@ namespace Global_Chat_2
         }
             #endregion
 
+        private void AddClient(TcpClient cli)
+        {
+            for (int I = 0; I < ConnectedClients.Length; I++)
+            {
+
+                var cli2 = ConnectedClients[I];
+
+                if (cli2 == null)
+                {
+                    ConnectedClients[I] = cli;
+                    donut.outlc("Successfully added client in slot " + I,ConsoleColor.Green);
+                    return;
+                }
+
+            }
+           
+        }
+
 
         private void PruneClients()
         {
 
-            for (int I = 0; I < ConnectedClients.Count; I++)
+            for (int I = 0; I < ConnectedClients.Length;  I++)
             {
-                     TcpClient cli2 = ConnectedClients[I];
-                    try {
-                     if (cli2.Client == null)
-                     {
-                         ConnectedClients.RemoveAt(I);
-                         donut.outlc("Killed bad client!", ConsoleColor.Red);
-                     }
-                      else if ((cli2.Client.Poll(1,SelectMode.SelectRead)  && cli2.Client.Available == 0)) {
-                          donut.outlc("Killed bad client! 2 ", ConsoleColor.Red);
-                         ConnectedClients.RemoveAt(I);
-                     } 
-                    } catch {
-                        donut.outlc("Killed bad client! 3 ", ConsoleColor.Red);
-                        ConnectedClients.RemoveAt(I);
+
+                var cli2 = ConnectedClients[I];
+                try
+                {
+                    if (cli2 != null)
+                    {
+                        if (cli2.Client == null)
+                        {
+                            ConnectedClients[I] = null;
+                            donut.outlc("Killed bad client!", ConsoleColor.Red);
+                        }
+                        else if ((cli2.Client.Poll(1, SelectMode.SelectRead) && cli2.Client.Available == 0))
+                        {
+                            donut.outlc("Killed bad client! 2 ", ConsoleColor.Red);
+                            ConnectedClients[I] = null;
+                        }
                     }
-               
+                }
+                catch
+                {
+                    donut.outlc("Killed bad client! 3 ", ConsoleColor.Red);
+                    ConnectedClients[I] = null;
+                }
+
             }
             
         }
 
+        private int GetClientsCount()
+        {
+            int cc = 0;
+            for (int I = 0; I < ConnectedClients.Length;  I++)
+            {
+
+                var cli2 = ConnectedClients[I];
+                if (cli2!=null) {
+                    cc++;
+                }
+             }
+            return cc;
+        }
 
 
         #region Remove Client Function
@@ -129,14 +169,14 @@ namespace Global_Chat_2
         {
             try
             {
-                for (int I = 0; I < ConnectedClients.Count; I++)
+                for (int I = 0; I < ConnectedClients.Length; I++)
                 {
-                    TcpClient cli2 = ConnectedClients[I];
+                    var cli2 = ConnectedClients[I];
                     if (cl == cli2)
                     {
-                        donut.outlc("Removed client successfully.",ConsoleColor.Red);
-                        ConnectedClients.RemoveAt(I);
-                        
+                        donut.outlc("Removed client successfully.", ConsoleColor.Red);
+                        ConnectedClients[I] = null;
+
                     }
                 }
             }
@@ -191,14 +231,15 @@ namespace Global_Chat_2
                 try
                 {
                     TcpClient T_Cli = R_TcpL.AcceptTcpClient();
-                    if (ConnectedClients.Count == MaxConnections)
+                    if (GetClientsCount() == MaxConnections)
                     {
                         T_Cli.Close();
+                        return;
                     }
-                    ConnectedClients.Add(T_Cli); // Add client to connected list.
+                    AddClient(T_Cli); // Add client to connected list.
                     // donut.outlc("Connected client! FUCK YEAH!", ConsoleColor.Red);
                     // Client connected, create thread for client.
-                    Console.WriteLine("Connected client count is now " + ConnectedClients.Count);
+                    Console.WriteLine("Connected client count is now " + GetClientsCount() );
 
                     DispatchClientEvent(T_Cli, (int)TCPServerClientEventArgs.Actions.CONNECT);
                     Thread CTHREAD = new Thread(new ParameterizedThreadStart(clientSpinThread)); // Create client thread
@@ -339,7 +380,7 @@ namespace Global_Chat_2
             }
 
 
-            public List<TcpClient> GetClients()
+            public TcpClient[] GetClients()
             {
                 return ConnectedClients;
             }

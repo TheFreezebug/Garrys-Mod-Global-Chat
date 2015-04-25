@@ -85,10 +85,13 @@ namespace Global_Chat_2
                             var cls = Init.Server.GetClients();
                             var jsonbuff = donut.DoAsciiEncode(clstr);
                             Console.WriteLine();
-                            for (int I = 0; I < cls.Count; I++)
+                            for (int I = 0; I < cls.Length; I++)
                             {
                                 var mcli = cls[I];
-                                Init.Server.WriteClientBuffer(mcli, jsonbuff);
+                                if (mcli != null)
+                                {
+                                    Init.Server.WriteClientBuffer(mcli, jsonbuff);
+                                }
                                 
                             }
                             Console.WriteLine("Message sent.");
@@ -110,13 +113,14 @@ namespace Global_Chat_2
                         case "list":
                             var cls3 = Init.Server.GetClients();
                             Console.WriteLine();
-                            for (int I = 0; I < cls3.Count; I++)
+                            for (int I = 0; I < cls3.Length; I++)
                             {
-                                var mcli = cls3[I];
-                                if (mcli.Client != null)
-                                {
-                                    Console.WriteLine(mcli.Client.RemoteEndPoint);
-                                }
+                                var mcli3 = cls3[I];
+                                
+                                    if (mcli3!=null && mcli3.Client != null)
+                                    {
+                                        Console.WriteLine(mcli3.Client.RemoteEndPoint);
+                                    }
                             }
                             Console.WriteLine();
                             break;

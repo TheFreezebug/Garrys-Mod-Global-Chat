@@ -150,12 +150,18 @@ namespace Global_Chat_2
             }
             try
             {
-                for (int I = 0; I < SClients.Count; I++)
+                for (int I = 0; I < SClients.Length; I++)
                 {
                     var MyCli = SClients[I];
-                    if (!(MyCli == cli))
+                    if (MyCli!=null && !(MyCli == cli))
                     {
-                        OServer.WriteClientBuffer(MyCli, buff);
+                        try
+                        {
+                            OServer.WriteClientBuffer(MyCli, buff);
+                        }
+                        catch { 
+                        }
+
                     }
 
                 }
