@@ -121,6 +121,7 @@ namespace Global_Chat_2
 
         }
 
+        #endregion 
 
 
 
@@ -128,7 +129,6 @@ namespace Global_Chat_2
 
 
 
-        
 
     }
 }
