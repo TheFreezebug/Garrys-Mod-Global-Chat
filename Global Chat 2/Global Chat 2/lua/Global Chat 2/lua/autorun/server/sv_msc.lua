@@ -7,24 +7,24 @@ if GlobalChat then
 	end
  
 end 
-
+ 
 GlobalChat = {}
-GlobalChat.Server = "108.241.117.61"
-GlobalChat.Port = 27789
-GlobalChat.ServerID = "DevTest"
-GlobalChat.IDNO = 0xFF 
-GlobalChat.Password = "diabetes123"
+GlobalChat.Server = "ip addr"
+GlobalChat.Port = 7845
+GlobalChat.ServerID = "server name"
+GlobalChat.IDNO = 0xA1
+GlobalChat.Password = "password"
 
 GlobalChat.ServerCodes = {
-	AUTH_REQUEST = 0x20,
+	AUTH_REQUEST = 0x20, 
 	SERVER_FULL = 0x34,
 	AUTH_SUCCESS = 0x4, 
 	FAIL_AUTH = 0x5,
 
-
+ 
 
 }
-
+ 
 
 
 util.AddNetworkString("GlobalChatText")
@@ -37,7 +37,7 @@ end
 GLSOCK_SUCCESS = GLSOCK_ERROR_SUCCESS
 GlobalChat.Sock = GLSock(GLSOCK_TYPE_TCP)
  
-
+ 
 function GlobalChat.Connect(sck,err) 
 	
 	if (err==GLSOCK_SUCCESS)  then
@@ -47,7 +47,7 @@ function GlobalChat.Connect(sck,err)
 		sck:Send(buffer,function()  //send buffer to server with callback of cout success.
 			cout("Connection SUCCESS.")
 		end)
-
+		GlobalChat.SendServerMessage("Server connected.") 
 		sck:Read(1000,GlobalChat.Read)//Read with callback of GlobalChat.Read.
 	else
 		//cout("Something went wrong, terminating scoket. ughh")
@@ -63,7 +63,7 @@ end
   
 
 function GlobalChat.DataHandler(str)
-	print(#str)
+
 	if #str < 10 then 
 		local bt = string.byte(str)
 		if bt == GlobalChat.ServerCodes.AUTH_REQUEST then 
@@ -117,17 +117,92 @@ function GlobalChat.DataHandler(str)
 
 	end
 
+	if buftab["Type"]=="ServerMessage" then 
+		local server = buftab["ServerID"]
+		local buff = buftab["BufferData"]
+
+		local msg = {Color(255,0,255),"[",server,"]",Color(255,255,0)," : ", buff["message"]}
+
+
+
+		for k,v in pairs(player.GetAll()) do 
+
+				net.Start("GlobalChatText")
+					net.WriteTable(msg)
+				net.Send(v)
+		
+		end
+
+
+
+	end
+
+
+
+	if buftab["Type"]=="CServMessage" then 
+	
+		local buff = buftab["BufferData"]
+
+		local msg = {Color(150,150,150),"[ChatServer]",Color(255,255,255)," : ", buff["message"]}
+
+
+
+		for k,v in pairs(player.GetAll()) do 
+			
+				net.Start("GlobalChatText")
+					net.WriteTable(msg)
+				net.Send(v)
+		
+		end
+
+
+
+	end
+
 
 end
 function GlobalChat.Chat(plr,t) 
+	local tbrk = string.Explode(" ",t)
 	local sck = GlobalChat.Sock
 
-	GlobalChat.SendBuffer(PlayerInfoJson(plr,t),"GlobalChat")
+	if tbrk[1]=="!global" then
+		if tbrk[2]=="on" then 
+
+
+				local msg = {Color(150,150,150),"[GlobalChat]: ",Color(255,255,255), "Global chat is now ON."}
+			
+				net.Start("GlobalChatText")
+					net.WriteTable(msg)
+				net.Send(plr)
+		
+			plr["DisableGlobalChat"] = false 
+		end
+		if tbrk[2]=="off" then 
+
+				local msg = {Color(150,150,150),"[GlobalChat]: ",Color(255,255,255), "Global chat is now OFF."}
+			
+				net.Start("GlobalChatText")
+					net.WriteTable(msg)
+				net.Send(plr)
+		
+
+
+			plr["DisableGlobalChat"] = true 
+		end
+		return ""
+	end
+
+	if plr["DisableGlobalChat"]~=true then 
+		GlobalChat.SendBuffer(PlayerInfoJson(plr,t),"GlobalChat")
+	end
 	
 end
 hook.Add("PlayerSay","MultiChat",GlobalChat.Chat)
 
+function GlobalChat.SendServerMessage(msg) 
+	GlobalChat.SendBuffer({message = msg},"ServerMessage")
 
+end
 
 function PlayerInfoJson(ply,msgstr,mergtable) 
 	if !IsValid(ply) then return false end
@@ -197,4 +272,4 @@ function GlobalChat.Read(sck, buf , err) // read the socket buffer
 		end)
 	end 
 end
-GlobalChat.Sock:Connect(GlobalChat.Server,GlobalChat.Port,GlobalChat.Connect)
+GlobalChat.Sock:Connect(GlobalChat.Server,GlobalChat.Port,GlobalChat.Connect) 
