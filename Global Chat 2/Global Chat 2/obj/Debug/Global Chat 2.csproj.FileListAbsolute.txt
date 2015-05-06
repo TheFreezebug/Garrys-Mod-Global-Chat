@@ -19,3 +19,5 @@ C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat
 C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.dll
 C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe.CodeAnalysisLog.xml
+C:\Users\DaneB\Documents\GitHub\Garrys-Mod-Global-Chat\Global Chat 2\Global Chat 2\bin\Debug\Global Chat 2.exe.lastcodeanalysissucceeded
