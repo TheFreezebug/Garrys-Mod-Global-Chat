@@ -10,8 +10,9 @@ namespace Global_Chat_2
 	
 	public abstract class donut
 	{
+        private static bool chocolate = true;
         private static readonly bool sprinkles = true;
-        private static bool glazed = true;
+        private static bool glazed = false;
         private static readonly bool creamfilled = true;
 
 		public static void outlc(string msg,ConsoleColor coltype) {
@@ -67,10 +68,6 @@ namespace Global_Chat_2
             return enc.GetBytes(str);
 
         }
-        
-
-
-
         public static string DoStringEncode(byte[] bar, int len) // STOP CODE. STOP CODE!
         {   
             var bar2 = new byte[len];

@@ -30,7 +30,7 @@ namespace Global_Chat_2
 
      
 
-            ColorConsole.SetScreenColorsApp.SetScreenColors(Color.FromArgb(100, 100, 100), Color.FromArgb(255, 255, 255, 255));
+          ColorConsole.SetScreenColorsApp.SetScreenColors(Color.FromArgb(100, 100, 100), Color.FromArgb(255, 255, 255, 255));
     
            Console.WriteLine("  ______ _       _           _     ______ _                   ______  ");
            Console.WriteLine(" / _____) |     | |         | |   / _____) |          _      (_____ \\ ");
@@ -49,7 +49,7 @@ namespace Global_Chat_2
 
 
 
-            Console.ForegroundColor = ConsoleColor.Gray;
+         
           Console.Title = "Global Chat Server";
           //Config.loadConfig();
           OServer.Start(cfg.Port, 32, cfg.UsePassword, cfg.Password);

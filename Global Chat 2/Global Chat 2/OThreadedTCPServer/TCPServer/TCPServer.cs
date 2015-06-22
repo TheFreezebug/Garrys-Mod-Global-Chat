@@ -95,6 +95,7 @@ namespace Global_Chat_2
        
             ConnectorThread = new Thread(new ThreadStart(clientConnectSpin)); 
             ConnectorThread.Start();
+            AutoPruneWorker.Start();
             return (int)Codes.SUCCESS_START;
         }
             #endregion

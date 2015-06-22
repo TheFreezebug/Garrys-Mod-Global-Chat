@@ -14,6 +14,7 @@ namespace Global_Chat_2
 
     public partial class TCPServer
     {
+        private Thread AutoPruneWorker = new Thread(new ThreadStart(AutoPruneClients));
 
         private void AddClient(TcpClient cli)
         {
@@ -34,7 +35,7 @@ namespace Global_Chat_2
         }
 
 
-        private void PruneClients()
+        private static void PruneClients()
         {
 
             for (int I = 0; I < ConnectedClients.Length; I++)
@@ -118,6 +119,13 @@ namespace Global_Chat_2
             }
 
             PruneClients();
+
+        }
+
+        private static void AutoPruneClients()
+        {
+            PruneClients();
+            Thread.Sleep(5 * 1000); // Prevents a bad client from being connected for more than 5 seconds.
 
         }
 
